@@ -307,15 +307,16 @@ function(add_arm_baremetal_gem5_se_executable TARGET_NAME)
   )
 
   message("[ARM gem5-SE build] Libs for ${TARGET_NAME}: ${ARG_LIBRARIES}")
-  target_link_libraries(${TARGET_NAME}
-    PUBLIC
-    ${ARG_LIBRARIES}
-  )
 
   if("Eigen" IN_LIST ARG_LIBRARIES)
     target_include_directories(${TARGET_NAME} PRIVATE ${EIGEN_DIR})
     list(REMOVE_ITEM ARG_LIBRARIES Eigen)  # Remove Eigen from the libraries to avoid linking it
   endif()
+
+  target_link_libraries(${TARGET_NAME}
+    PUBLIC
+    ${ARG_LIBRARIES}
+  )
 
   target_link_directories(${TARGET_NAME}
     PRIVATE
