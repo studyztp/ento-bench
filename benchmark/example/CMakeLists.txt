@@ -75,5 +75,3 @@ add_custom_target(bench-example-help
   COMMAND ${CMAKE_COMMAND} -E echo ""
   COMMENT "Show available example benchmarks"
 )
-
-endif() # STM32_BUILD 

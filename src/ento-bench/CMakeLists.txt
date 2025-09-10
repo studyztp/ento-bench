@@ -12,8 +12,9 @@ set(PROBLEMS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/problems)
 
 if (GEM5_BUILD)
   set(GEM5_PATH $ENV{GEM5_INSTALL_PATH})
-  if (NOT DEFINED GEM5_PATH)
-    message(FATAL_ERROR "GEM5 PATH was not found")
+  if ("${GEM5_PATH}" STREQUAL "")
+    message(FATAL_ERROR "GEM5 PATH was not found. Please set the " 
+                                    "GEM5_INSTALL_PATH environment variable.")
   endif()
 
   #message("Including and linking GEM5 m5ops.")

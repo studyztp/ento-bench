@@ -90,6 +90,8 @@ target_include_directories(ento_util
 
 # =============================================================================
 # Ento Pose Estimation
+
+if (NOT GEM5_BUILD)
 add_subdirectory(ento-pose)
 
 target_include_directories(ento-pose
@@ -102,10 +104,12 @@ target_include_directories(ento-abs-pose
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   ${EIGEN_DIR}
 )
+endif()
 # =============================================================================
 
 # =============================================================================
 # Ento State Estimation
+if (NOT GEM5_BUILD)
 add_subdirectory(ento-state-est)
 
 #target_include_directories(ento-state-est-robobee-cekf
@@ -125,7 +129,7 @@ target_include_directories(ento-attitude-est
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   ${EIGEN_DIR}
 )
-
+endif()
 # =============================================================================
 
 # =============================================================================

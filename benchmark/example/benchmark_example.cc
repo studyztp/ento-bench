@@ -7,10 +7,12 @@
 #include <ento-util/unittest.h>
 #include <ento-bench/bench_config.h>
 
+#ifdef NATIVE
 #include <ento-mcu/cache_util.h>
 #include <ento-mcu/flash_util.h>
 #include <ento-mcu/clk_util.h>
 #include <ento-mcu/systick_config.h>
+#endif // NATIVE
 
 #include <Eigen/Dense>
 #include <array>
@@ -150,11 +152,12 @@ int main()
     using Problem = VectorAddProblem<Scalar, VectorSize>;
     
     initialise_monitor_handles();
-
+#ifdef NATIVE
     // Configure max clock rate and set flash latency
     sys_clk_cfg();
     SysTick_Setup();
     __enable_irq();
+#endif // NATIVE
 
     // NEW IDIOM: Generic cache setup using configuration
     ENTO_BENCH_SETUP();
