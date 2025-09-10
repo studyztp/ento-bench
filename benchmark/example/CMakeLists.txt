@@ -11,6 +11,16 @@ set(MODULES
   ento_util
   CMSIS::STM32::${STM_PRODUCT}
 )
+elseif(GEM5_BUILD)
+set(MODULES
+  bench
+  Eigen
+  ento_util
+)
+else()
+message(FATAL_ERROR "Example benchmarks only supported for STM32 or gem5 builds")
+endif()
+
 set(BENCH_TARGETS) # List of targets
 
 # =============================================================================
@@ -39,8 +49,9 @@ add_configured_benchmark_group_with_target_configs("examples"
 # Add STM32 targets for flashing/debugging
 # =============================================================================
 message(VERBOSE "Example Bench targets: ${BENCH_TARGETS}")
-add_stm32_targets("${BENCH_TARGETS}")
-
+if (STM32_BUILD)
+  add_stm32_targets("${BENCH_TARGETS}")
+endif()
 # =============================================================================
 # Help target for examples
 # =============================================================================
