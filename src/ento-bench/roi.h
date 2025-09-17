@@ -15,36 +15,48 @@
 #include <cstdint>
   
 #ifdef ARM_GEM5
-#define M5OP_RESET_STATS \
-  __asm__ __volatile__ ( \
-      ".align 2\n\t" \
-      ".short 0xEE00 | (0x40) \n\t" \
-      ".short 0x0110\n\t" \
-      : : : "r0", "r1", "r2", "r3" \
-  )
-#define M5OP_DUMP_STATS \
-  __asm__ __volatile__ ( \
-      "mov r0, #0\n\t" \
-      "mov r1, #0\n\t" \
-      ".align 2\n\t" \
-      ".short 0xEE00 | (0x41) \n\t" \
-      ".short 0x0110\n\t" \
-      : : : "r0", "r1", "r2", "r3" \
-  )
-#define M5OP_DUMP_RESET_STATS \
-  __asm__ __volatile__ ( \
-      ".align 2\n\t" \
-      ".short 0xEE00 | (0x42) \n\t" \
-      ".short 0x0110\n\t" \
-      : : : "r0", "r1", "r2", "r3" \
-  )
-#define M5OP_EXIT \
-  __asm__ __volatile__ ( \
-      ".align 2\n\t" \
-      ".short 0xEE00 | (0x21) \n\t" \
-      ".short 0x0110\n\t" \
-      : : : "r0", "r1", "r2", "r3" \
-  )
+#ifndef M5OP_DEST
+#define M5OP_DEST 0x20020000u
+#endif
+
+// Address encoding and halfword helpers
+#define M5_ADDR(code) ((uint32_t)(M5OP_DEST) + (((uint32_t)(code) & 0xFFu) << 8))
+#define M5_LO16(x)    ((uint32_t)((x) & 0xFFFFu))
+#define M5_HI16(x)    ((uint32_t)(((x) >> 16) & 0xFFFFu))
+
+// Core primitive: build absolute address without literal pools, then byte-store the value
+static inline void m5_poke_imm(uint32_t lo16, uint32_t hi16) {
+  __asm__ __volatile__(
+      ".syntax unified\n\t"
+      "movw r1, %0\n\t"
+      "movt r1, %1\n\t"
+      "strb %2, [r1]\n\t"
+      :
+      : "i"(lo16), "i"(hi16), "r"(0)
+      : "r1", "memory");
+}
+
+// Exported functions (match your assembly intent)
+static inline void m5_exit() {
+  m5_poke_imm(M5_LO16(M5_ADDR(0x21)), M5_HI16(M5_ADDR(0x21)));
+}
+static inline void m5_work_begin() {
+  m5_poke_imm(M5_LO16(M5_ADDR(0x5A)), M5_HI16(M5_ADDR(0x5A)));
+}
+static inline void m5_work_end() {
+  m5_poke_imm(M5_LO16(M5_ADDR(0x5B)), M5_HI16(M5_ADDR(0x5B)));
+}
+
+// Optional: wire ROI helpers to MMIO versions
+static inline void m5_reset_stats() {
+  m5_poke_imm(M5_LO16(M5_ADDR(0x40)), M5_HI16(M5_ADDR(0x40)));
+}
+static inline void m5_dump_reset_stats() {
+  m5_poke_imm(M5_LO16(M5_ADDR(0x42)), M5_HI16(M5_ADDR(0x42)));
+}
+
+#define M5OP_RESET_STATS       m5_reset_stats()
+#define M5OP_DUMP_RESET_STATS  m5_dump_reset_stats()
 #endif
 
 

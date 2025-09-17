@@ -25,8 +25,13 @@ if(STM32_BUILD)
 elseif(GEM5_ARMV7E-M_BUILD)
 #@TODO: Not sure how up to date these gem5
 #       hooks are
-  add_subdirectory(startup)
-  target_include_directories(startup
+  # add_subdirectory(startup)
+  # target_include_directories(startup
+  #   PUBLIC
+  #   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  # )
+  add_subdirectory(gem5-util)
+  target_include_directories(gem5_syscall_wrapper
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   )

@@ -150,18 +150,18 @@ int main()
     using Scalar = float;
     constexpr size_t VectorSize = 1000;  // Large enough to measure meaningful performance
     using Problem = VectorAddProblem<Scalar, VectorSize>;
-    
-    initialise_monitor_handles();
 #ifdef NATIVE
+    initialise_monitor_handles();
+
     // Configure max clock rate and set flash latency
     sys_clk_cfg();
     SysTick_Setup();
     __enable_irq();
-#endif // NATIVE
+
 
     // NEW IDIOM: Generic cache setup using configuration
     ENTO_BENCH_SETUP();
-
+#endif // NATIVE
     // Print benchmark configuration
     ENTO_BENCH_PRINT_CONFIG();
 

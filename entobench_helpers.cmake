@@ -291,19 +291,18 @@ endfunction()
 function(add_arm_baremetal_gem5_se_executable TARGET_NAME)
   # Extract source files and libs from arguments
   cmake_parse_arguments(ARG "" "" "SOURCES;LIBRARIES" ${ARGN})
-  
   add_executable(${TARGET_NAME} ${ARG_SOURCES})
 
   target_link_options(${TARGET_NAME}
     PRIVATE
     -L$ENV{ARM_NONE_EABI_LIB}/thumb/v7e-m+fp/hard #Link hard float lib
-    -lc_nano
-    -nostartfiles
+    # -lc_nano
+    # -nostartfiles
     --data-sections
-    -Xlinker -T${STARTUP_DIR}/boot.ld
+    # -Xlinker -T${STARTUP_DIR}/boot.ld
     -static # gem5 SE mode needs a static binary
-    -Wl,--undefined,_printf_float
-    -Wl,--undefined,_scanf_float
+    # -Wl,--undefined,_printf_float
+    # -Wl,--undefined,_scanf_float
   )
 
   message("[ARM gem5-SE build] Libs for ${TARGET_NAME}: ${ARG_LIBRARIES}")
@@ -313,14 +312,14 @@ function(add_arm_baremetal_gem5_se_executable TARGET_NAME)
     list(REMOVE_ITEM ARG_LIBRARIES Eigen)  # Remove Eigen from the libraries to avoid linking it
   endif()
 
-  target_link_libraries(${TARGET_NAME}
-    PUBLIC
+  # target_link_libraries(${TARGET_NAME}
+  #   PUBLIC
+  #   ${ARG_LIBRARIES} gem5_syscall_wrapper
+  # )
+  target_link_libraries(${TARGET_NAME} 
+    PRIVATE 
     ${ARG_LIBRARIES}
-  )
-
-  target_link_directories(${TARGET_NAME}
-    PRIVATE
-    ${CMAKE_BINARY_DIR}/src/startup/CMakeFiles/startup_lib.dir
+    "-Wl,--whole-archive" gem5_syscall_wrapper "-Wl,--no-whole-archive"
   )
 
 endfunction()

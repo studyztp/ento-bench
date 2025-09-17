@@ -255,13 +255,11 @@ if(STM32_BUILD)
 
 elseif(GEM5_BUILD)
 	message(STATUS "Building for gem5...")
-
-  # If env variable for GEM5_PATH is not set, then look for it.
-  set(GEM5_PATH "$ENV{GEM5_PATH}" CACHE PATH "Path to gem5 installation.")
-  set(STARTUP_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/startup" CACHE PATH "Path to startup directory.")
-
-  if(NOT GEM5_PATH)
-    find_path(GEM5_PATH NAMES gem5 PATH)
+  set(GEM5_UTIL ${CMAKE_CURRENT_SOURCE_DIR}/src/gem5-util)
+  if (NOT EXISTS ${GEM5_UTIL}/${GEM5_SYSCALL_WRAPPER_FILENAME}.S)
+    message(FATAL_ERROR "Gem5 syscall wrapper file not found: ${GEM5_SYSCALL_WRAPPER_FILENAME}.S")
+  else()
+    message(VERBOSE "Using gem5 syscall wrapper: ${GEM5_SYSCALL_WRAPPER_FILENAME}.S")
   endif()
 
 else() # Native Build

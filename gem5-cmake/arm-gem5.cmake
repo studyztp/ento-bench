@@ -48,7 +48,7 @@ set(MARCH "armv7e-m" CACHE STRING "Set the architecture")
 # Apply architecture-specific flags
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS_INIT} ${CMAKE_C_FLAGS} -mcpu=${CORE} -mfpu=${FPU} -mfloat-abi=${FLOAT_ABI} -mthumb -ffunction-sections -fdata-sections")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} ${CMAKE_CXX_FLAGS} -mcpu=${CORE} -mfpu=${FPU} -mfloat-abi=${FLOAT_ABI} -mthumb -ffunction-sections -fdata-sections")
-set(CMAKE_EXE_LINKER_FLAGS "-static -mcpu=${CORE} -mfpu=${FPU} -mfloat-abi=${FLOAT_ABI} --specs=nosys.specs --specs=nano.specs -nostartfiles -fno-exceptions --data-sections")
+set(CMAKE_EXE_LINKER_FLAGS "-static -mcpu=${CORE} -mfpu=${FPU} -mfloat-abi=${FLOAT_ABI} --specs=nosys.specs --specs=nano.specs -fno-exceptions --data-sections")
 
 message("Using arm-gem5 toolchain file. \nCMAKE_C_FLAGS: ${CMAKE_C_FLAGS}\nCMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 message("Toolchain path, prefix, and ext: ${RISCV_TOOLCHAIN_BIN_PATH}, ${RISCV_TOOLCHAIN_BIN_GCC}, ${RISCV_TOOLCHAIN_BIN_EXT}")
@@ -64,3 +64,5 @@ set(CMAKE_OBJDUMP ${ARM_BM_TOOLCHAIN_BIN_PATH}/${CROSS_COMPILE}objdump CACHE FIL
 
 add_definitions(-DGEM5=1)
 add_definitions(-DARM_GEM5=1)
+
+set(GEM5_SYSCALL_WRAPPER_FILENAME syscall_wrapper)
