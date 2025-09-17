@@ -3,15 +3,17 @@
 #include <ento-util/debug.h>
 #include <ento-util/unittest.h>
 
-#include <ento-mcu/cache_util.h>
-#include <ento-mcu/flash_util.h>
-#include <ento-mcu/clk_util.h>
 #include <ento-state-est/attitude-est/attitude_estimation_problem.h>
 #include <ento-state-est/attitude-est/mahoney_fixed.h>
 
 #include <ento-bench/bench_config.h>
 
+#ifdef NATIVE
+#include <ento-mcu/cache_util.h>
+#include <ento-mcu/flash_util.h>
+#include <ento-mcu/clk_util.h>
 extern "C" void initialise_monitor_handles(void);
+#endif
 
 using namespace EntoBench;
 using namespace EntoUtil;
@@ -22,7 +24,7 @@ int main()
   using Scalar = Q7_24;
   using Filter = FilterMahonyFixed<Scalar, true>; // MARG (with magnetometer)
   using Problem = AttitudeProblem<Scalar, Filter, true>;
-  
+#ifdef NATIVE
   initialise_monitor_handles();
 
   // Configure max clock rate and set flash latency
@@ -31,7 +33,7 @@ int main()
   __enable_irq();
 
   ENTO_BENCH_SETUP();
-
+#endif
   // Print benchmark configuration
   ENTO_BENCH_PRINT_CONFIG();
 

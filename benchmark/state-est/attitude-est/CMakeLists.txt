@@ -14,12 +14,23 @@ set(MODULES
   ento_math
   CMSIS::STM32::${STM_PRODUCT}
 )
+elseif(GEM5_BUILD)
+set(MODULES
+  bench
+  Eigen
+  ento-state-est
+  ento-attitude-est
+  ento_util
+  ento_math
+)
+endif()
+
 set(BENCH_TARGETS) # List of targets
 
 # =============================================================================
 # Create all benchmark targets first
 # =============================================================================
-
+if(STM32_BUILD)
 # Mahony benchmarks
 add_benchmark(bench-mahony-float-imu
   SOURCES bench_mahony_float_imu.cc
@@ -304,6 +315,14 @@ create_benchmark_runner_script()
 #  OUTPUT_TIMEOUT 20
 #)
 
+elseif(GEM5_BUILD)
+add_benchmark(bench-mahony-q7-24-marg
+  SOURCES bench_mahony_q7_24_marg.cc
+  LIBRARIES ${MODULES}
+)
+list(APPEND BENCH_TARGETS bench-mahony-q7-24-marg)
+endif()
+
 # =============================================================================
 # Convenience Targets for Common Use Cases
 # =============================================================================
@@ -410,6 +429,6 @@ endif()
 # Add STM32 targets for flashing/debugging
 # =============================================================================
 message(VERBOSE "Attitude Bench targets: ${BENCH_TARGETS}")
+if(STM32_BUILD)
 add_stm32_targets("${BENCH_TARGETS}")
-
 endif() 
