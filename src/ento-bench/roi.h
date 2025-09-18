@@ -47,7 +47,6 @@ static inline void m5_work_end() {
   m5_poke_imm(M5_LO16(M5_ADDR(0x5B)), M5_HI16(M5_ADDR(0x5B)));
 }
 
-// Optional: wire ROI helpers to MMIO versions
 static inline void m5_reset_stats() {
   m5_poke_imm(M5_LO16(M5_ADDR(0x40)), M5_HI16(M5_ADDR(0x40)));
 }

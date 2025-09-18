@@ -1,4 +1,3 @@
-# ...existing code...
 if (GEM5_BUILD)
     message(WARNING "CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
 
@@ -40,9 +39,7 @@ if (GEM5_BUILD)
     # 3) Archive into libgem5_syscall_wrapper.a
     add_library(gem5_syscall_wrapper STATIC ${OBJ_FILE})
 
-    # Optional: if you still want explicit build steps as phony targets
     add_custom_target(gem5_syscall_wrapper_preprocessed DEPENDS ${PP_FILE})
     add_custom_target(gem5_syscall_wrapper_object DEPENDS ${OBJ_FILE})
     set_target_properties(gem5_syscall_wrapper PROPERTIES LINKER_LANGUAGE C)
 endif()
-# ...existing code...
