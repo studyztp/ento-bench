@@ -1,5 +1,6 @@
 if (GEM5_BUILD)
-    message(WARNING "CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
+    message("Configuring gem5_syscall_wrapper build targets...")
+    message("SRAM_START: ${SRAM_START}, SRAM_END: ${SRAM_END}")
 
     # Inputs
     # Expect: SRC_FILE (basename, no ext), SRC_FILE_PATH (path to .S)
@@ -12,8 +13,9 @@ if (GEM5_BUILD)
     add_custom_command(
         OUTPUT  ${PP_FILE}
         COMMAND arm-none-eabi-cpp
-                -mfloat-abi=${FLOAT_ABI} -mfpu=${FPU} -mcpu=${CORE}
-                ${SRC_FILE_PATH} -o ${PP_FILE}
+                -mfloat-abi=${FLOAT_ABI} -mfpu=${FPU} -mcpu=${CORE} 
+                ${SRC_FILE_PATH}
+                -o ${PP_FILE}
         DEPENDS ${SRC_FILE_PATH}
         COMMENT "Preprocessing ${SRC_FILE}"
         VERBATIM

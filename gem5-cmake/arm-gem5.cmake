@@ -45,10 +45,14 @@ set(FPU "fpv4-sp-d16" CACHE STRING "Set the FPU type")
 set(FLOAT_ABI "hard" CACHE STRING "Set the float ABI type")
 set(MARCH "armv7e-m" CACHE STRING "Set the architecture")
 
+set(FLASH "0x08000000" CACHE STRING "Set the flash start address")
+set(SRAM_START "0x20000000" CACHE STRING "Set the SRAM start address")
+set(SRAM_END "0x20018000" CACHE STRING "Set the SRAM end address")
+
 # Apply architecture-specific flags
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS_INIT} ${CMAKE_C_FLAGS} -mcpu=${CORE} -mfpu=${FPU} -mfloat-abi=${FLOAT_ABI} -mthumb -ffunction-sections -fdata-sections")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} ${CMAKE_CXX_FLAGS} -mcpu=${CORE} -mfpu=${FPU} -mfloat-abi=${FLOAT_ABI} -mthumb -ffunction-sections -fdata-sections")
-set(CMAKE_EXE_LINKER_FLAGS "-static -mcpu=${CORE} -mfpu=${FPU} -mfloat-abi=${FLOAT_ABI} --specs=nosys.specs --specs=nano.specs -fno-exceptions --data-sections")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} ${CMAKE_CXX_FLAGS} -mcpu=${CORE} -mfpu=${FPU} -mfloat-abi=${FLOAT_ABI} -mthumb -ffunction-sections -fdata-sections -Wl,--section-start=.init=${FLASH}")
+set(CMAKE_EXE_LINKER_FLAGS "-static -mcpu=${CORE} -mfpu=${FPU} -mfloat-abi=${FLOAT_ABI} --specs=nosys.specs --specs=nano.specs -fno-exceptions --data-sections -Wl,--defsym=__sram_start__=${SRAM_START} -Wl,--defsym=__sram_end__=${SRAM_END} -Wl,--defsym=__stack_top=${SRAM_END} -Wl,--defsym=__stack_limit=${SRAM_START}")
 
 message("Using arm-gem5 toolchain file. \nCMAKE_C_FLAGS: ${CMAKE_C_FLAGS}\nCMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 message("Toolchain path, prefix, and ext: ${RISCV_TOOLCHAIN_BIN_PATH}, ${RISCV_TOOLCHAIN_BIN_GCC}, ${RISCV_TOOLCHAIN_BIN_EXT}")

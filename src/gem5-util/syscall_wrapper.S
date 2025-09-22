@@ -85,17 +85,50 @@ _fstat_r:
     bx   lr
 .size _fstat_r, .-_fstat_r
 
+.extern __sram_start__
+.extern __sram_end__
+
 .global _sbrk_r
 .type   _sbrk_r,%function
 .thumb_func
 _sbrk_r:
-    push {r4,lr}
-    mov  r4, r0
-    movs r0, #12        /* ENOMEM */
-    str  r0, [r4, #0]
-    mvn  r0, # 0         /* (void*)-1 */
-    pop  {r4,pc}
-.size _sbrk_r, .-_sbrk_r
+    push {r4,r5,r6,lr}
+    mov  r4, r0         /* save _reent pointer */
+    mov  r5, r1         /* save increment */
+    
+    ldr  r6, =heap_ptr
+    ldr  r0, [r6]       /* r0 = current heap_ptr */
+    
+    /* Initialize on first call to proper RAM address */
+    cmp  r0, #0
+    bne  1f
+    ldr  r0, =__sram_start__    /* Force heap to start in main RAM */
+    str  r0, [r6]
+    
+1:  /* Calculate new heap pointer */
+    add  r1, r0, r5     /* new_ptr = current + increment */
+    
+    /* Check against RAM end (assuming 96KB RAM) */
+    ldr  r2, =__sram_end__    /* End of 96KB RAM */
+    cmp  r1, r2
+    bhi  heap_full      /* if new_ptr > RAM_end, fail */
+    
+    /* Success: update heap pointer */
+    str  r1, [r6]       /* heap_ptr = new_ptr */
+    pop  {r4,r5,r6,pc}  /* return old heap_ptr in r0 */
+    
+heap_full:
+    /* Failure: set errno and return -1 */
+    movs r1, #12        /* ENOMEM */
+    str  r1, [r4, #0]   /* errno = ENOMEM */
+    mvn  r0, #0         /* return -1 */
+    pop  {r4,r5,r6,pc}
+
+.data
+.align 4
+heap_ptr:
+    .word 0
+
 
 .global _exit_r
 .type   _exit_r,%function
@@ -163,3 +196,16 @@ raise:
     svc  #0              @ r0 = 0 or -errno
     pop  {r4,pc}
 .size raise, .-raise
+
+.extern __sram_start__
+.extern __sram_end__
+
+.global _stack_init
+.type _stack_init, %function
+.thumb_func
+_stack_init:
+    ldr r3, =__sram_end__
+    mov sp, r3
+    ldr r10, =__sram_start__        // Your SRAM start address
+    bx lr                       // Return
+.size _stack_init, . - _stack_init

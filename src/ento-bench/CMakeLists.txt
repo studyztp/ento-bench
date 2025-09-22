@@ -11,15 +11,6 @@ add_library(bench
 set(PROBLEMS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/problems)
 
 if (GEM5_BUILD)
-  set(GEM5_PATH $ENV{GEM5_INSTALL_PATH})
-  if ("${GEM5_PATH}" STREQUAL "")
-    message(FATAL_ERROR "GEM5 PATH was not found. Please set the " 
-                                    "GEM5_INSTALL_PATH environment variable.")
-  endif()
-
-  #message("Including and linking GEM5 m5ops.")
-  #message("Found env path: ${GEM5_PATH}")
-
   set(TARGET_ISA arm)
   #target_include_directories(bench
     #INTERFACE

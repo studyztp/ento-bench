@@ -158,7 +158,8 @@ void start_roi(void)
   //last_cpi_count = get_cpi_count();
   //last_cycle_count = get_cycle_count();
 #elif defined(RISCV_GEM5) || defined(ARM_GEM5)
-  M5OP_RESET_STATS;
+  // M5OP_RESET_STATS;
+  m5_work_begin();
 #endif
   __asm__ volatile("" ::: "memory");
 }
@@ -174,7 +175,8 @@ void end_roi(void)
   latency_pin_low();
 #endif // defined(LATENCY_MEASUREMENT)
 #elif defined(RISCV_GEM5) || defined(ARM_GEM5)
-  M5OP_DUMP_RESET_STATS;
+  // M5OP_DUMP_RESET_STATS;
+  m5_work_end();
 #endif // defined(STM32_BUILD)
   __asm__ volatile("" ::: "memory");
 }
