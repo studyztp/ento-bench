@@ -329,9 +329,13 @@ public:
 
         if constexpr (Reps > 1 && Verbosity == 1)
         {
+#ifdef NATIVE
           print_rep_metrics(rep_metrics_, i); 
 #if defined(STM32_BUILD) & defined(LATENCY_MEASUREMENT)
           Delay::ms(50);
+#endif
+#else
+          print_rep(i);
 #endif
         }
         else if constexpr (Reps > 1 && Verbosity == 2)
@@ -628,6 +632,10 @@ private:
   // Print metrics for each iteration in PrintOnly mode
   void print_metrics(const ROIMetrics& metrics, int iteration) const {
     printf("Iteration %i: Cycles = %lu \n", iteration, metrics.elapsed_cycles);
+  }
+
+  void print_rep(int iteration) const {
+    printf("Rep %i\n", iteration);
   }
 
   void print_rep_metrics(const ROIMetrics& metrics, int iteration) const {

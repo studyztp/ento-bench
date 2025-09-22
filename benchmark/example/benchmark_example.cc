@@ -164,9 +164,11 @@ int main()
 #endif // NATIVE
     // Print benchmark configuration
     ENTO_BENCH_PRINT_CONFIG();
-
+#ifdef NATIVE
     ENTO_INFO("Vector-Vector Add Example: %zu float elements", VectorSize);
-
+#else
+    ENTO_INFO("Vector-Vector Add Example: %lu float elements", VectorSize);
+#endif // NATIVE
     // Create problem instance
     Problem problem;
 
@@ -176,8 +178,11 @@ int main()
 
     // Run the benchmark
     harness.run();
-
+#ifdef NATIVE
     ENTO_INFO("Finished Vector-Vector Add Example: %zu elements", VectorSize);
+#else
+    ENTO_INFO("Finished Vector-Vector Add Example: %lu elements", VectorSize);
+#endif // NATIVE
 
     exit(1);
     return 0;
