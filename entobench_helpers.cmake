@@ -353,9 +353,9 @@ function(add_benchmark TARGET_NAME)
       SOURCES ${ARG_SOURCES}
       LIBRARIES ${ARG_LIBRARIES}
     )
-    add_arm_executable(${TARGET_NAME}-no-semihosting
-      SOURCES ${SOURCE_FILE}
-      LIBRARIES ${ARG_LIBRARIES})
+    #add_arm_executable(${TARGET_NAME}-no-semihosting
+    #  SOURCES ${SOURCE_FILE}
+    #  LIBRARIES ${ARG_LIBRARIES})
 
   elseif(GEM5_BUILD)
     add_arm_baremetal_gem5_se_executable(${TARGET_NAME}

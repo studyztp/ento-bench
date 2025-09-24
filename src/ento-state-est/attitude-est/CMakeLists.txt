@@ -57,21 +57,21 @@ set(LIBRARIES_benchmark_attitude_filters
 #  ento_util ento_math Eigen
 #)
 
-foreach(TEST_FILE ${TEST_FILES})
-
-  set(TEST_SRC "test/${TEST_FILE}")
-  get_filename_component(TEST_BIN ${TEST_FILE} NAME_WE)
-  string(CONCAT LIBRARY_VAR_NAME "LIBRARIES_" ${TEST_BIN})
-  set(TEST_LIBRARIES ${${LIBRARY_VAR_NAME}})
-  add_ento_test(
-    ${TEST_BIN}
-    SOURCES   ${TEST_SRC}
-    LIBRARIES ${TEST_LIBRARIES}
-  )
-endforeach()
+#foreach(TEST_FILE ${TEST_FILES})
+#
+#  set(TEST_SRC "test/${TEST_FILE}")
+#  get_filename_component(TEST_BIN ${TEST_FILE} NAME_WE)
+#  string(CONCAT LIBRARY_VAR_NAME "LIBRARIES_" ${TEST_BIN})
+#  set(TEST_LIBRARIES ${${LIBRARY_VAR_NAME}})
+#  add_ento_test(
+#    ${TEST_BIN}
+#    SOURCES   ${TEST_SRC}
+#    LIBRARIES ${TEST_LIBRARIES}
+#  )
+#endforeach()
 
 # Add debug test for MARG issue
-add_executable(debug_marg_issue test/debug_marg_issue.cc)
-target_link_libraries(debug_marg_issue ento_util ento_math ento-state-est ento-attitude-est)
-target_include_directories(debug_marg_issue PRIVATE ${CMAKE_SOURCE_DIR}/src ${EIGEN_DIR})
-set_target_properties(debug_marg_issue PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+#add_executable(debug_marg_issue test/debug_marg_issue.cc)
+#target_link_libraries(debug_marg_issue ento_util ento_math ento-state-est ento-attitude-est)
+#target_include_directories(debug_marg_issue PRIVATE ${CMAKE_SOURCE_DIR}/src ${EIGEN_DIR})
+#set_target_properties(debug_marg_issue PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)

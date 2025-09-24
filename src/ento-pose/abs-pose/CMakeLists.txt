@@ -20,34 +20,34 @@ target_link_libraries(ento-abs-pose
 # Data Generation
 #=========================================
 
-add_executable(generate_minimal_solver_data_abs
-  test/generate_minimal_solver_data.cc
-)
+#add_executable(generate_minimal_solver_data_abs
+#  test/generate_minimal_solver_data.cc
+#)
 
-target_include_directories(generate_minimal_solver_data_abs
-  PRIVATE
-  ${EIGEN_DIR}
+#target_include_directories(generate_minimal_solver_data_abs
+#PRIVATE
+#  ${EIGEN_DIR}
   
-)
+  #)
 
-target_link_libraries(generate_minimal_solver_data_abs
-  ento_util ento-abs-pose ento-pose
-)
+#target_link_libraries(generate_minimal_solver_data_abs
+    # ento_util ento-abs-pose ento-pose
+  #)
 
 # Enhanced version with parameterized noise levels and realistic camera parameters
-add_executable(generate_minimal_solver_data_abs_enhanced
-  test/generate_minimal_solver_data_enhanced.cc
-)
+#add_executable(generate_minimal_solver_data_abs_enhanced
+#  test/generate_minimal_solver_data_enhanced.cc
+#)
 
-target_include_directories(generate_minimal_solver_data_abs_enhanced
-  PRIVATE
-  ${EIGEN_DIR}
-  
-)
+#target_include_directories(generate_minimal_solver_data_abs_enhanced
+#  PRIVATE
+#  ${EIGEN_DIR}
+#  
+#)
 
-target_link_libraries(generate_minimal_solver_data_abs_enhanced
-  ento_util ento-abs-pose ento-pose
-)
+#target_link_libraries(generate_minimal_solver_data_abs_enhanced
+#  ento_util ento-abs-pose ento-pose
+#)
 
 #=========================================
 # Testing

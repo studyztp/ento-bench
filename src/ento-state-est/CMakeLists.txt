@@ -12,9 +12,9 @@ add_library(ento-state-est
 add_subdirectory(attitude-est)
 
 # Experimental attitude estimation with failure checking
-if(ENTO_ENABLE_FAILURE_CHECKS)
-  add_subdirectory(attitude-est-exp)
-endif()
+#if(ENTO_ENABLE_FAILURE_CHECKS)
+#  add_subdirectory(attitude-est-exp)
+#endif()
 
 #target_link_libraries(ento-state-est
   #PRIVATE

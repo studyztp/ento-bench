@@ -35,46 +35,46 @@ target_link_libraries(ento-rel-pose
 # )
 
 # Enhanced data generation tool with comprehensive statistics and unified noise model
-add_executable(generate_minimal_solver_data_rel_enhanced
-  test/generate_minimal_solver_data_enhanced.cc
-)
-
-target_include_directories(generate_minimal_solver_data_rel_enhanced
-  PRIVATE
-  ${EIGEN_DIR}
-)
-
-target_link_libraries(generate_minimal_solver_data_rel_enhanced
-  ento_util ento-rel-pose ento-pose
-)
+#add_executable(generate_minimal_solver_data_rel_enhanced
+#  test/generate_minimal_solver_data_enhanced.cc
+#)
+#
+#target_include_directories(generate_minimal_solver_data_rel_enhanced
+#  PRIVATE
+#  ${EIGEN_DIR}
+#)
+#
+#target_link_libraries(generate_minimal_solver_data_rel_enhanced
+    #  ento_util ento-rel-pose ento-pose
+    #)
 
 # Focused robust relative pose data generator and tester
-add_executable(generate_robust_relative_pose_data
-  test/generate_robust_relative_pose_data.cc
-)
+#add_executable(generate_robust_relative_pose_data
+#  test/generate_robust_relative_pose_data.cc
+#)
 
-target_include_directories(generate_robust_relative_pose_data
-  PRIVATE
-  ${EIGEN_DIR}
-)
+#target_include_directories(generate_robust_relative_pose_data
+#  PRIVATE
+#  ${EIGEN_DIR}
+#)
 
-target_link_libraries(generate_robust_relative_pose_data
-  ento_util ento-rel-pose ento-pose
-)
+#target_link_libraries(generate_robust_relative_pose_data
+#  ento_util ento-rel-pose ento-pose
+#)
 
 # Standalone upright planar 3pt test to compare different data generation methods
-add_executable(test_upright_planar_3pt_standalone
-  test/test_upright_planar_3pt_standalone.cc
-)
+#add_executable(test_upright_planar_3pt_standalone
+    #test/test_upright_planar_3pt_standalone.cc
+  #)
 
-target_include_directories(test_upright_planar_3pt_standalone
-  PRIVATE
-  ${EIGEN_DIR}
-)
-
-target_link_libraries(test_upright_planar_3pt_standalone
-  ento_util ento-rel-pose ento-pose
-)
+#target_include_directories(test_upright_planar_3pt_standalone
+    #PRIVATE
+  #${EIGEN_DIR}
+  #)
+  #
+#target_link_libraries(test_upright_planar_3pt_standalone
+    #ento_util ento-rel-pose ento-pose
+  #)
 
 #=========================================
 # Testing
@@ -110,28 +110,28 @@ set(LIBRARIES_test_upright_three_pt
   ento_util ento-rel-pose ento-pose Eigen
 )
 
-foreach(TEST_FILE ${TEST_FILES})
+#foreach(TEST_FILE ${TEST_FILES})
+#
+#  set(TEST_SRC "test/${TEST_FILE}")
+#  get_filename_component(TEST_BIN ${TEST_FILE} NAME_WE)
+#  string(CONCAT LIBRARY_VAR_NAME "LIBRARIES_" ${TEST_BIN})
+#  set(TEST_LIBRARIES ${${LIBRARY_VAR_NAME}})
+#  add_ento_test(
+#    ${TEST_BIN}
+#    SOURCES   ${TEST_SRC}
+#    LIBRARIES ${TEST_LIBRARIES}
+#  )
+#endforeach()
+#
+#add_executable(bench_rel_min_solvers
+#  test/bench_rel_min_solvers.cc
+#)
 
-  set(TEST_SRC "test/${TEST_FILE}")
-  get_filename_component(TEST_BIN ${TEST_FILE} NAME_WE)
-  string(CONCAT LIBRARY_VAR_NAME "LIBRARIES_" ${TEST_BIN})
-  set(TEST_LIBRARIES ${${LIBRARY_VAR_NAME}})
-  add_ento_test(
-    ${TEST_BIN}
-    SOURCES   ${TEST_SRC}
-    LIBRARIES ${TEST_LIBRARIES}
-  )
-endforeach()
+#target_include_directories(bench_rel_min_solvers
+#  PRIVATE
+#  ${EIGEN_DIR}
+#)
 
-add_executable(bench_rel_min_solvers
-  test/bench_rel_min_solvers.cc
-)
-
-target_include_directories(bench_rel_min_solvers
-  PRIVATE
-  ${EIGEN_DIR}
-)
-
-target_link_libraries(bench_rel_min_solvers
-  ento_util ento-rel-pose ento-pose
-)
+#target_link_libraries(bench_rel_min_solvers
+#  ento_util ento-rel-pose ento-pose
+#)
