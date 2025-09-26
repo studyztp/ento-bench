@@ -8,6 +8,12 @@
 #include <ento-mcu/cache_util.h>
 #endif
 
+#ifdef NAIVE
+#define FORMAT_SPECIFIER_SIZE_T "zu"
+#else
+#define FORMAT_SPECIFIER_SIZE_T "lu" 
+#endif
+
 namespace EntoBench {
 
 // Forward declaration of Harness template (no default arguments to avoid redefinition)
@@ -136,14 +142,14 @@ using CustomHarness = Harness<Problem, DoWarmup, Reps, InnerReps, MaxProblems, V
 #define ENTO_BENCH_PRINT_CONFIG() \
     do { \
         printf("=== Benchmark Configuration ===\n"); \
-        printf("REPS: %zu\n", EntoBench::DefaultReps); \
-        printf("INNER_REPS: %zu\n", EntoBench::DefaultInnerReps); \
+        printf("REPS: %" FORMAT_SPECIFIER_SIZE_T "\n", EntoBench::DefaultReps); \
+        printf("INNER_REPS: %" FORMAT_SPECIFIER_SIZE_T "\n", EntoBench::DefaultInnerReps); \
         printf("VERBOSITY: %d\n", EntoBench::DefaultVerbosity); \
-        printf("MAX_PROBLEMS: %zu\n", EntoBench::DefaultMaxProblems); \
+        printf("MAX_PROBLEMS: %" FORMAT_SPECIFIER_SIZE_T "\n", EntoBench::DefaultMaxProblems); \
         printf("DO_WARMUP: %s\n", EntoBench::DefaultDoWarmup ? "true" : "false"); \
         printf("ENABLE_CACHES: %s\n", EntoBench::DefaultEnableCaches ? "true" : "false"); \
         printf("ENABLE_VECTORIZATION: %s\n", EntoBench::DefaultEnableVectorization ? "true" : "false"); \
-        printf("H7_PERFORMANCE_MULTIPLIER: %zu\n", EntoBench::H7_PERFORMANCE_MULTIPLIER); \
+        printf("H7_PERFORMANCE_MULTIPLIER: %" FORMAT_SPECIFIER_SIZE_T "\n", EntoBench::H7_PERFORMANCE_MULTIPLIER); \
         printf("===============================\n"); \
     } while(0)
 
