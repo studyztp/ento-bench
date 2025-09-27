@@ -113,3 +113,10 @@ function(stm32_generate_linker_script)
 endfunction()
 
 add_subdirectory(control)
+
+if(USE_ASM)
+    message(WARNING "Using assembly implementations")
+    foreach(ubench ${LIST_OF_UBENCH})
+        target_compile_definitions(${ubench} PRIVATE USE_ASM)
+    endforeach()
+endif()

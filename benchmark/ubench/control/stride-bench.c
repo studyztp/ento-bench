@@ -19,7 +19,7 @@ void ubench_c(uint32_t *array, const size_t size) {
     }
 }
 
-// Assembly version of ubench_c
+// Assembly version of ubench_c with -O0
 // __attribute__ ((noinline))
 // void ubench_c(uint32_t *array, const size_t size) {
 //     81a0:       b480            push    {r7}
@@ -65,47 +65,51 @@ void ubench_c(uint32_t *array, const size_t size) {
 //     81e0:       f85d 7b04       ldr.w   r7, [sp], #4
 //     81e4:       4770            bx      lr
 
+// Assembly version of ubench_c with -O2
+// __attribute__ ((noinline))
+// void ubench_c(uint32_t *array, const size_t size) {
+//     for (size_t i = 0; i < size; i += 1) {
+//  80000b0:       b149            cbz     r1, 80000c6 <ubench_c+0x16>
+//  80000b2:       3804            subs    r0, #4
+//  80000b4:       eb00 0181       add.w   r1, r0, r1, lsl #2
+//         if (array[i]) {
+//             array[i] = 0;
+//  80000b8:       2200            movs    r2, #0
+//         if (array[i]) {
+//  80000ba:       f850 3f04       ldr.w   r3, [r0, #4]!
+//  80000be:       b103            cbz     r3, 80000c2 <ubench_c+0x12>
+//             array[i] = 0;
+//  80000c0:       6002            str     r2, [r0, #0]
+//     for (size_t i = 0; i < size; i += 1) {
+//  80000c2:       4288            cmp     r0, r1
+//  80000c4:       d1f9            bne.n   80000ba <ubench_c+0xa>
+//         }
+//     }
+// }
+//  80000c6:       4770            bx      lr
+
 __attribute__ ((noinline))
 void ubench_asm(uint32_t *array, const size_t size) {
-    // Assembly version of ubench_c based on -O0 output of the ubench_c 
-    // function
+    // After using gem5 to verify the performance of using which version of 
+    // ubench_c, we found that the -O2 version stress the branch predictor
+    // more, so we use the -O2 version here because it is more realistic and 
+    // allows us to observe more mispredictions to match the real behavior.
     __asm__ __volatile__ (
-        "push {r7}                \n"
-        "sub sp, #20              \n"
-        "add r7, sp, #0           \n"
-        "str r0, [r7, #4]         \n"
-        "str r1, [r7, #0]         \n"
-        "movs r3, #0              \n"
-        "str r3, [r7, #12]        \n"
-        "b.n 1f                   \n"
-        "2:                       \n"
-        "ldr r3, [r7, #12]        \n"
-        "lsls r3, r3, #2          \n"
-        "ldr r2, [r7, #4]         \n"
-        "add r3, r2               \n"
-        "ldr r3, [r3, #0]         \n"
-        "cmp r3, #0               \n"
-        "beq.n 3f                 \n"
-        "ldr r3, [r7, #12]        \n"
-        "lsls r3, r3, #2          \n"
-        "ldr r2, [r7, #4]         \n"
-        "add r3, r2               \n"
-        "movs r2, #0              \n"
-        "str r2, [r3, #0]         \n"
-        "3:                       \n"
-        "ldr r3, [r7, #12]        \n"
-        "adds r3, #1              \n"
-        "str r3, [r7, #12]        \n"
-        "1:                       \n"
-        "ldr r2, [r7, #12]        \n"
-        "ldr r3, [r7, #0]         \n"
-        "cmp r2, r3               \n"
-        "bcc.n 2b                 \n"
-        "nop                      \n"
-        "nop                      \n"
-        "adds r7, #20             \n"
-        "mov sp, r7               \n"
-        "ldr.w r7, [sp], #4       \n"
-        "bx lr                    \n"
+        "    .syntax unified\n"
+        "    mov r0, %0\n"           // r0 = array
+        "    mov r1, %1\n"           // r1 = size
+        "    cbz     r1, 1f\n"          // if (size == 0) exit
+        "    subs    r0, #4\n"          // Pre-adjust array pointer
+        "    add.w   r2, r0, r1, lsl #2\n" // r2 = end_address
+        "    movs    r3, #0\n"          // r3 = 0 (constant)
+        "2:  ldr.w   r1, [r0, #4]!\n"   // Load with pre-increment
+        "    cbz     r1, 3f\n"          // if (value == 0) skip store
+        "    str     r3, [r0, #0]\n"    // Store 0
+        "3:  cmp     r0, r2\n"          // Compare current vs end
+        "    bne.n   2b\n"              // Loop if not equal
+        "1:  \n"
+        : "+r"(array)                   // array is input/output (modified)
+        : "r"(size)                     // size is input only
+        : "r1", "r2", "r3", "cc", "memory"
     );
 }

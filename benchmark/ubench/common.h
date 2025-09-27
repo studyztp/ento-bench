@@ -7,6 +7,7 @@
 
 #define ARRAY_SIZE 1024
 #define STRIDE 4
+#define NUM_WARMUP 0
 
 #ifndef M5OP_DEST
 #define M5OP_DEST 0x20020000u
@@ -20,7 +21,7 @@
 #define M5OP_DUMP_RESET_STATS  0x42
 
 // Address encoding and halfword helpers
-#define M5_ADDR(code) ((uint32_t)(M5OP_DEST) + 
+#define M5_ADDR(code) ((uint32_t)(M5OP_DEST) + \
                                             (((uint32_t)(code) & 0xFFu) << 8))
 
 #define M5_POKE_IMM(op_)                                          \
@@ -56,5 +57,25 @@ static inline void m5_reset_stats() {
 static inline void m5_dump_reset_stats() {
   M5_POKE_IMM(DUMP_RESET_STATS);
 }
+
+#define REPEAT_1(x) x
+#define REPEAT_2(x) REPEAT_1(x) REPEAT_1(x)
+#define REPEAT_4(x) REPEAT_2(x) REPEAT_2(x)
+#define REPEAT_8(x) REPEAT_4(x) REPEAT_4(x)
+#define REPEAT_16(x) REPEAT_8(x) REPEAT_8(x)
+#define REPEAT_32(x) REPEAT_16(x) REPEAT_16(x)
+#define REPEAT_64(x) REPEAT_32(x) REPEAT_32(x)
+#define REPEAT_128(x) REPEAT_64(x) REPEAT_64(x)
+#define REPEAT_256(x) REPEAT_128(x) REPEAT_128(x)
+#define REPEAT_512(x) REPEAT_256(x) REPEAT_256(x)
+#define REPEAT_1024(x) REPEAT_512(x) REPEAT_512(x)
+#define REPEAT_2048(x) REPEAT_1024(x) REPEAT_1024(x)
+
+// Indirect macro expansion helper
+#define CONCAT(a, b) CONCAT_IMPL(a, b)
+#define CONCAT_IMPL(a, b) a##b
+
+// Dynamic repeat macro
+#define REPEAT_N(n, x) CONCAT(REPEAT_, n)(x)
 
 #endif // COMMON_H
