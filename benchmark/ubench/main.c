@@ -1,14 +1,8 @@
 #include "common.h"
 
+// forward declarations
 void init(uint32_t *array, const size_t size, const size_t stride);
-
-#ifdef USE_ASM
-void ubench_asm(uint32_t *array, const size_t size);
-#define ubench ubench_asm
-#else
-void ubench_c(uint32_t *array, const size_t size);
-#define ubench ubench_c
-#endif
+void ubench(uint32_t *array, const size_t size);
 
 int main() {
     uint32_t array[ARRAY_SIZE];

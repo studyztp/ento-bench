@@ -58,6 +58,10 @@ static inline void m5_dump_reset_stats() {
   M5_POKE_IMM(DUMP_RESET_STATS);
 }
 
+
+// Macro to repeat a statement n times (up to 4096)
+// This makes sure that the statements are repeated in place without loops to
+// avoid additional branches.
 #define REPEAT_1(x) x
 #define REPEAT_2(x) REPEAT_1(x) REPEAT_1(x)
 #define REPEAT_4(x) REPEAT_2(x) REPEAT_2(x)
@@ -70,6 +74,7 @@ static inline void m5_dump_reset_stats() {
 #define REPEAT_512(x) REPEAT_256(x) REPEAT_256(x)
 #define REPEAT_1024(x) REPEAT_512(x) REPEAT_512(x)
 #define REPEAT_2048(x) REPEAT_1024(x) REPEAT_1024(x)
+#define REPEAT_4096(x) REPEAT_2048(x) REPEAT_2048(x)
 
 // Indirect macro expansion helper
 #define CONCAT(a, b) CONCAT_IMPL(a, b)

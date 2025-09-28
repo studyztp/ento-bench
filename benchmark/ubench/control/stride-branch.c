@@ -8,11 +8,9 @@ void init(uint32_t *array, const size_t size, const size_t stride) {
 }
 
 __attribute__ ((noinline))
-void ubench_c(uint32_t *array, const size_t size) {
-    REPEAT_N(ARRAY_SIZE, ALWAYS_TRUE_BENCH);
+void ubench(uint32_t *array, const size_t size) {
 }
 
 __attribute__ ((noinline))
 void ubench_asm(uint32_t *array, const size_t size) {
-    ubench_c(array, size);
 }
