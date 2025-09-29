@@ -1,5 +1,5 @@
 #include "common.h"
-
+extern "C" {
 static volatile int always_true = 1;
 
 // This macro inserts an always-true branch instruction sequence into the code.
@@ -9,7 +9,6 @@ static volatile int always_true = 1;
 // is outside the current prefetch buffer, allowing us to measure the branch
 // prediction and prefetch behavior accurately.
 // Additionally, the ICache line size is 64 bits, with streaming branches, the
-// ICache also can not affect the misprediction penalty.
 #define ALWAYS_TRUE_BENCH \
     asm volatile(                     \
         ".p2align 4             \n"   \
@@ -17,8 +16,8 @@ static volatile int always_true = 1;
         "  cmp.w    r2, #0      \n"   \
         "  bne.w    1f          \n"   \
         "  nop.w                \n"   \
-        "  nop.w                \n"   \
-        "  nop.w                \n"   \
+        ".p2align 4             \n"   \
+        PAYLOAD_NOPS(4)               \
         "1: nop.w               \n"   \
         :                             \
         : "r"(&always_true)           \
@@ -32,4 +31,5 @@ void init(uint32_t *array, const size_t size, const size_t stride) {
 __attribute__ ((noinline))
 void ubench(uint32_t *array, const size_t size) {
     REPEAT_N(ARRAY_SIZE, ALWAYS_TRUE_BENCH);
+}// ICache also can not affect the misprediction penalty.
 }

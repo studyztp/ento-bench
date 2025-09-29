@@ -1,5 +1,5 @@
 #include "common.h"
-
+extern "C" {
 static volatile int always_true = 1;
 
 // This macro inserts an always-true branch instruction sequence into the code.
@@ -30,4 +30,5 @@ void init(uint32_t *array, const size_t size, const size_t stride) {
 __attribute__ ((noinline))
 void ubench(uint32_t *array, const size_t size) {
     REPEAT_N(ARRAY_SIZE, ALWAYS_TRUE_BENCH);
+}
 }
