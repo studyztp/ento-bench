@@ -1,7 +1,7 @@
 #ifndef HARNESS_HH
 #define HARNESS_HH
 
-#ifndef NATIVE
+#if !defined(NATIVE) && !defined(GEM5)
 #include <ento-mcu/timing.h>
 #include <ento-mcu/cache_util.h>
 #endif
