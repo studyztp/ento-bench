@@ -255,12 +255,64 @@ if(STM32_BUILD)
 
 elseif(GEM5_BUILD)
 	message(STATUS "Building for gem5...")
-  set(GEM5_UTIL ${CMAKE_CURRENT_SOURCE_DIR}/src/gem5-util)
-  if (NOT EXISTS ${GEM5_UTIL}/${GEM5_SYSCALL_WRAPPER_FILENAME}.S)
-    message(FATAL_ERROR "Gem5 syscall wrapper file not found: ${GEM5_SYSCALL_WRAPPER_FILENAME}.S")
-  else()
-    message(VERBOSE "Using gem5 syscall wrapper: ${GEM5_SYSCALL_WRAPPER_FILENAME}.S")
-  endif()
+  function(stm32_generate_linker_script)
+        set(options)
+        set(oneValueArgs 
+            FLASH_ORIGIN
+            FLASH_SIZE
+            RAM_ORIGIN
+            RAM_SIZE
+            LINKER_SCRIPT
+            HEAP_SIZE
+            STACK_SIZE
+        )
+        set(multiValueArgs)
+        cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+        set(FLASH_ORIGIN ${ARG_FLASH_ORIGIN})
+        if (NOT FLASH_ORIGIN)
+            message(FATAL_ERROR "FLASH_ORIGIN is required")
+        endif()
+        set(FLASH_SIZE ${ARG_FLASH_SIZE})
+        if (NOT FLASH_SIZE)
+            message(FATAL_ERROR "FLASH_SIZE is required")
+        endif()
+        set(RAM_ORIGIN ${ARG_RAM_ORIGIN})
+        if (NOT RAM_ORIGIN)
+            message(FATAL_ERROR "RAM_ORIGIN is required")
+        endif()
+        set(RAM_SIZE ${ARG_RAM_SIZE})
+        if (NOT RAM_SIZE)
+            message(FATAL_ERROR "RAM_SIZE is required")
+        endif()
+        set(LINKER_SCRIPT ${ARG_LINKER_SCRIPT})
+        if (NOT LINKER_SCRIPT)
+            message(FATAL_ERROR "LINKER_SCRIPT is required")
+        endif()
+        set(HEAP_SIZE ${ARG_HEAP_SIZE})
+        if (NOT HEAP_SIZE)
+            message(FATAL_ERROR "HEAP_SIZE is required")
+        endif()
+        set(STACK_SIZE ${ARG_STACK_SIZE})
+        if (NOT STACK_SIZE)
+            message(FATAL_ERROR "STACK_SIZE is required")
+        endif()
+        
+        # Execute the linker script generation
+        include(${CMAKE_SOURCE_DIR}/stm32-cmake/stm32/linker_ld.cmake)
+  endfunction()
+
+  set(LINKER_SCRIPT ${CMAKE_BINARY_DIR}/gem5-linker.ld)
+
+  stm32_generate_linker_script(
+      FLASH_ORIGIN ${FLASH_ORIGIN}
+      FLASH_SIZE ${FLASH_SIZE}
+      RAM_ORIGIN ${RAM_ORIGIN}
+      RAM_SIZE ${RAM_SIZE}
+      LINKER_SCRIPT ${LINKER_SCRIPT}
+      HEAP_SIZE ${HEAP_SIZE}
+      STACK_SIZE ${STACK_SIZE}
+  )
+
 
 else() # Native Build
   if(APPLE)

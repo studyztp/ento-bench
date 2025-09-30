@@ -322,6 +322,8 @@ function(add_arm_baremetal_gem5_se_executable TARGET_NAME)
     "-Wl,--whole-archive" gem5_syscall_wrapper "-Wl,--no-whole-archive"
   )
 
+  target_link_options(${TARGET_NAME} PRIVATE -T${LINKER_SCRIPT})
+
 endfunction()
 
 function(add_non_arm_executable TARGET_NAME)

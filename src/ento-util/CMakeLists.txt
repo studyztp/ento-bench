@@ -39,7 +39,7 @@ set(TEST_FILES
 
 # Define library lists based on source names
 if (GEM5_ARMV7E-M_BUILD)
-  set(TEST_LIBRARIES_test_matrix_reader ento_math m ento_util sys Eigen)
+  set(TEST_LIBRARIES_test_matrix_reader ento_math m ento_util Eigen)
 elseif (STM32_BUILD)
   set(TEST_LIBRARIES_test_matrix_reader ento_math m ento-mcu-semihosted ento_util Eigen)
 else ()

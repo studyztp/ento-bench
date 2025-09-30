@@ -35,11 +35,11 @@ elseif(GEM5_ARMV7E-M_BUILD)
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   )
-  add_subdirectory(sys)
-  target_include_directories(sys
-    PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  )
+  # # add_subdirectory(sys)
+  # target_include_directories(sys
+  #   PUBLIC
+  #   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  # )
   #target_include_directories(util
   #  INTERFACE
   #  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>

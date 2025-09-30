@@ -6,7 +6,7 @@
 #endif
 
 #ifdef GEM5
-#include <sys/syscalls.c>
+// #include <sys/syscalls.c>
 //#include <gem5/m5ops.h>
 #endif
 
@@ -19,43 +19,50 @@
 #define M5OP_DEST 0x20020000u
 #endif
 
-// Address encoding and halfword helpers
-#define M5_ADDR(code) ((uint32_t)(M5OP_DEST) + (((uint32_t)(code) & 0xFFu) << 8))
-#define M5_LO16(x)    ((uint32_t)((x) & 0xFFFFu))
-#define M5_HI16(x)    ((uint32_t)(((x) >> 16) & 0xFFFFu))
+// Define the M5 operation codes
+#define M5OP_EXIT              0x21
+#define M5OP_WORK_BEGIN        0x5A
+#define M5OP_WORK_END          0x5B
+#define M5OP_RESET_STATS       0x40
+#define M5OP_DUMP_RESET_STATS  0x42
 
-// Core primitive: build absolute address without literal pools, then byte-store the value
-static inline void m5_poke_imm(uint32_t lo16, uint32_t hi16) {
-  __asm__ __volatile__(
-      ".syntax unified\n\t"
-      "movw r1, %0\n\t"
-      "movt r1, %1\n\t"
-      "strb %2, [r1]\n\t"
-      :
-      : "i"(lo16), "i"(hi16), "r"(0)
-      : "r1", "memory");
-}
+// Address encoding and halfword helpers
+#define M5_ADDR(code) ((uint32_t)(M5OP_DEST) + \
+                                            (((uint32_t)(code) & 0xFFu) << 8))
+
+#define M5_POKE_IMM(op_)                                          \
+  __asm__ volatile                                                     \
+  ( ".syntax unified\n\t"                                             \
+    "push {r0-r5}\n\t"      /* Save current state */                 \
+    "mov r0, #0\n\t"        /* r0 = 0 (first arg) */                 \
+    "mov r1, #0\n\t"        /* r1 = 0 (second arg) */                \
+    "mov r2, #0\n\t"        /* r2 = 0 (third arg) */                 \
+    "mov r3, #0\n\t"        /* r3 = 0 (fourth arg) */                \
+    "mov r4, #0\n\t"        /* r4 = 0 (fifth arg) */                 \
+    "ldr r5, =%c0\n\t"      /* Load M5 address */                    \
+    "strb r0, [r5]\n\t"     /* Trigger M5 operation */               \
+    "pop {r0-r5}\n\t"       /* Restore state */                      \
+    :                                                                 \
+    : "i"(M5_ADDR(M5OP_ ## op_))                                     \
+    : "memory" );
 
 // Exported functions (match your assembly intent)
 static inline void m5_exit() {
-  m5_poke_imm(M5_LO16(M5_ADDR(0x21)), M5_HI16(M5_ADDR(0x21)));
+  M5_POKE_IMM(EXIT);
 }
 static inline void m5_work_begin() {
-  m5_poke_imm(M5_LO16(M5_ADDR(0x5A)), M5_HI16(M5_ADDR(0x5A)));
+  M5_POKE_IMM(WORK_BEGIN);
 }
 static inline void m5_work_end() {
-  m5_poke_imm(M5_LO16(M5_ADDR(0x5B)), M5_HI16(M5_ADDR(0x5B)));
+  M5_POKE_IMM(WORK_END);
 }
 
 static inline void m5_reset_stats() {
-  m5_poke_imm(M5_LO16(M5_ADDR(0x40)), M5_HI16(M5_ADDR(0x40)));
+  M5_POKE_IMM(RESET_STATS);
 }
 static inline void m5_dump_reset_stats() {
-  m5_poke_imm(M5_LO16(M5_ADDR(0x42)), M5_HI16(M5_ADDR(0x42)));
+  M5_POKE_IMM(DUMP_RESET_STATS);
 }
-
-#define M5OP_RESET_STATS       m5_reset_stats()
-#define M5OP_DUMP_RESET_STATS  m5_dump_reset_stats()
 #endif
 
 

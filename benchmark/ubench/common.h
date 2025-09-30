@@ -1,11 +1,6 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-// Common includes and definitions for the ubench benchmark
-#include <stdio.h>
-#include <stdint.h>
-#include <cstdlib> 
-
 #include <ento-bench/harness.h>
 #include <ento-util/file_path_util.h>
 #include <ento-util/debug.h>

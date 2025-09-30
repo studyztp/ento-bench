@@ -30,7 +30,7 @@ MB_MEM2 (NOLOAD)       : { _sMB_MEM2 = . ; *(MB_MEM2) ; _eMB_MEM2 = . ; } >RAM_S
 endif()
 
 set(SCRIPT_TEXT 
-"ENTRY(Reset_Handler)\n\
+"ENTRY(_custom_start)
 \n\
 _estack = ${RAM_ORIGIN} + ${RAM_SIZE};\n\
 _Min_Heap_Size = ${HEAP_SIZE};\n\
