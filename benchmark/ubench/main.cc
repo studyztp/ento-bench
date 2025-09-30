@@ -7,7 +7,7 @@ void ubench(uint32_t *array, const size_t size);
 int main()
 {
 
-#ifdef NATIVE
+#ifndef GEM5
     initialise_monitor_handles();
 
     // Configure max clock rate and set flash latency
@@ -18,7 +18,7 @@ int main()
 
     // NEW IDIOM: Generic cache setup using configuration
     ENTO_BENCH_SETUP();
-#endif // NATIVE
+#endif // GEM5
 
     ENTO_BENCH_PRINT_CONFIG();
 

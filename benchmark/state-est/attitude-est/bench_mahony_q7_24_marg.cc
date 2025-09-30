@@ -8,12 +8,12 @@
 
 #include <ento-bench/bench_config.h>
 
-#ifdef NATIVE
+#ifndef GEM5
 #include <ento-mcu/cache_util.h>
 #include <ento-mcu/flash_util.h>
 #include <ento-mcu/clk_util.h>
 extern "C" void initialise_monitor_handles(void);
-#endif
+#endif // GEM5
 
 using namespace EntoBench;
 using namespace EntoUtil;
@@ -24,7 +24,7 @@ int main()
   using Scalar = Q7_24;
   using Filter = FilterMahonyFixed<Scalar, true>; // MARG (with magnetometer)
   using Problem = AttitudeProblem<Scalar, Filter, true>;
-#ifdef NATIVE
+#ifndef GEM5
   initialise_monitor_handles();
 
   // Configure max clock rate and set flash latency
@@ -33,7 +33,7 @@ int main()
   __enable_irq();
 
   ENTO_BENCH_SETUP();
-#endif
+#endif // GEM5
   // Print benchmark configuration
   ENTO_BENCH_PRINT_CONFIG();
 

@@ -7,12 +7,12 @@
 #include <ento-util/unittest.h>
 #include <ento-bench/bench_config.h>
 
-#ifdef NATIVE
+#ifndef GEM5
 #include <ento-mcu/cache_util.h>
 #include <ento-mcu/flash_util.h>
 #include <ento-mcu/clk_util.h>
 #include <ento-mcu/systick_config.h>
-#endif // NATIVE
+#endif // GEM5
 
 extern "C" void initialise_monitor_handles(void);
 

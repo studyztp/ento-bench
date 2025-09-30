@@ -33,6 +33,9 @@ function (add_ubench)
     if (NOT source_file)
         message(FATAL_ERROR "SOURCE_FILE is required")
     endif()
+    if (STM32_BUILD)
+        add_stm32_target(${target_name})
+    endif()
     add_benchmark(${target_name} 
         SOURCES ${source_file}
         LIBRARIES ${MODULES}
@@ -43,9 +46,3 @@ function (add_ubench)
 endfunction()
 
 add_subdirectory(control)
-
-if (STM32_BUILD)
-	foreach(target ${LIST_OF_UBENCH})
-		add_stm32_target(${target})
-	endforeach()
-endif()

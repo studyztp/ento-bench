@@ -7,12 +7,12 @@
 #include <ento-util/unittest.h>
 #include <ento-bench/bench_config.h>
 
-#ifdef NATIVE
+#ifndef GEM5
 #include <ento-mcu/cache_util.h>
 #include <ento-mcu/flash_util.h>
 #include <ento-mcu/clk_util.h>
 #include <ento-mcu/systick_config.h>
-#endif // NATIVE
+#endif // GEM5
 
 #include <Eigen/Dense>
 #include <array>
@@ -150,7 +150,7 @@ int main()
     using Scalar = float;
     constexpr size_t VectorSize = 1000;  // Large enough to measure meaningful performance
     using Problem = VectorAddProblem<Scalar, VectorSize>;
-#ifdef NATIVE
+#ifndef GEM5
     initialise_monitor_handles();
 
     // Configure max clock rate and set flash latency
@@ -161,7 +161,7 @@ int main()
 
     // NEW IDIOM: Generic cache setup using configuration
     ENTO_BENCH_SETUP();
-#endif // NATIVE
+#endif // GEM5
     // Print benchmark configuration
     ENTO_BENCH_PRINT_CONFIG();
 
