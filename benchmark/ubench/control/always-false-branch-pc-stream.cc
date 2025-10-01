@@ -8,10 +8,14 @@ __attribute__ ((noinline))
 void branch_to () {asm volatile("nop.w");}
 
 // This macro inserts an always-false branch instruction sequence.
-// This matches the always-true version except the branch is never taken. By
-// matching the instruction sequence, we can compare the behavior of 
-// always-true and always-false branches to have fair comparison.
-// TODO: there is one more NOP in always-false version, need to fix it.
+// This matches the always-true version except the branch is never taken. 
+// For STM32-G4, ldr.w (1 cycle cuz cached), cmp.w (1 cycle), 
+// bne.w (not taken: 1 cycle), and 5 NOPs (1 cycle each).
+// The STM32-G4 is a 3 stage pipeline (Fetch, Decode, Execute) so the expected
+// taken penalty is 1+1+1+5 = 8 cycles, so the expected total cycles is:
+// Measured_Cycles = ARRAY_SIZE × (8).
+// We can use this to confirm the penalty of the always-true branch.
+
 #define ALWAYS_FALSE_BENCH \
     asm volatile(                     \
         ".p2align 4             \n"   \

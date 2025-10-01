@@ -1,4 +1,3 @@
-// Example implementation using the ARM syscall wrapper macros
 #include "syscall_wrapper.h"
 #include <sys/types.h>
 #include <errno.h>  

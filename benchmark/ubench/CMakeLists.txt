@@ -1,6 +1,4 @@
-set(LIST_OF_UBENCH "")
 include(${CMAKE_SOURCE_DIR}/entobench_helpers.cmake)
-message(WARNING "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
 if(GEM5_BUILD)
     set(MODULES
         bench
@@ -41,8 +39,6 @@ function (add_ubench)
         LIBRARIES ${MODULES}
     )
     target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
-    list(APPEND LIST_OF_UBENCH ${target_name})
-    set(LIST_OF_UBENCH ${LIST_OF_UBENCH} PARENT_SCOPE)
 endfunction()
 
 add_subdirectory(control)
