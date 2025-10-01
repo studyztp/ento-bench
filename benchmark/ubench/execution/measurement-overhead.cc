@@ -7,11 +7,14 @@ extern "C" {
 // Measured_Cycles = ARRAY_SIZE × (8). 
 // Any extra cycles measured is the overhead of measurement itself.
 
-#define JUST_NOPS \
+#define JUST_NOPS_16BIT \
     asm volatile(                     \
-        ".p2align 4             \n"   \
-        PAYLOAD_NOPS(8)               \
-        ::: "memory");      
+        ".thumb                 \n"   \
+        ".rept 8                \n"   \
+        "  nop                  \n"   \
+        ".endr                  \n"   \
+        :                             \
+        :: "memory");
 
 __attribute__ ((noinline))
 void init(uint32_t *array, const size_t size, const size_t stride) {
@@ -20,6 +23,6 @@ void init(uint32_t *array, const size_t size, const size_t stride) {
 
 __attribute__ ((noinline))
 void ubench(uint32_t *array, const size_t size) {
-    REPEAT_N(ARRAY_SIZE, JUST_NOPS);
+    REPEAT_N(ARRAY_SIZE, JUST_NOPS_16BIT);
 }
 }
