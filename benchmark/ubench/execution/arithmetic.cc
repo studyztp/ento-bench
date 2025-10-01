@@ -21,8 +21,9 @@ void init(uint32_t *array, const size_t size, const size_t stride) {
 
 __attribute__ ((noinline))
 void ubench(uint32_t *array, const size_t size) {
-    for (size_t i = 0; i < ARRAY_SIZE; i++) {
+    for (size_t i = 0; i < size; i++) {
         JUST_AN_OP;
+        asm volatile("" ::: "memory");
     }
 }
 }
