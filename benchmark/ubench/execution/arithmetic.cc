@@ -9,10 +9,12 @@ extern "C" {
 #define JUST_AN_OP \
     asm volatile(                     \
         ".thumb                 \n"   \
+        ".rept 8                \n"   \
         STR(OP) "s r0, #1       \n"   \
         STR(OP) "s r1, #1       \n"   \
         STR(OP) "s r2, #1       \n"   \
         STR(OP) "s r3, #1       \n"   \
+        ".endr                  \n"   \
         :                             \
         :                             \
         : "r0", "memory");
