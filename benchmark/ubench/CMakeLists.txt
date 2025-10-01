@@ -15,6 +15,8 @@ else()
     )
 endif()
 
+set(BENCH_TARGETS "" CACHE INTERNAL "List of benchmark targets") # At top level
+
 function (add_ubench)
     set(options)
     set(oneValueArgs TARGET_NAME)
@@ -39,6 +41,16 @@ function (add_ubench)
         add_stm32_target(${target_name})
     endif()
     target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+    
+    list(APPEND BENCH_TARGETS ${target_name})
+    set(BENCH_TARGETS ${BENCH_TARGETS} CACHE INTERNAL "List of benchmark targets")
 endfunction()
 
 add_subdirectory(control)
+
+message(WARNING "Microbenchmarks targets: ${BENCH_TARGETS}")
+
+add_configured_benchmark_group_with_target_configs("ubench"
+  TARGETS ${BENCH_TARGETS}
+  CONFIG_FILE "${CMAKE_SOURCE_DIR}/benchmark/configs/ubench_benchmarks.json"
+)

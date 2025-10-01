@@ -1,0 +1,9 @@
+{
+  "ubench" : {
+    "reps": 10,
+    "inner_reps": 1,
+    "verbosity": 1,
+    "enable_caches": true,
+    "max_problems": 1
+  }
+}
