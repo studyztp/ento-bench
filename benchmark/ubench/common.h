@@ -19,7 +19,7 @@ extern "C" void initialise_monitor_handles(void);
 using namespace EntoBench;
 using namespace EntoUtil;
 
-#define ARRAY_SIZE 1024
+#define ARRAY_SIZE 4
 #define STRIDE 4
 #define NUM_WARMUP 0
 
@@ -47,7 +47,7 @@ using namespace EntoUtil;
 // Dynamic repeat macro
 #define REPEAT_N(n, x) CONCAT(REPEAT_, n)(x)
 
-#define PAYLOAD_NOPS(n)   ".rept " #n "\n\tnop.w\n\t.endr\n"
+#define PAYLOAD_NOPS_16_BITS(n)   ".rept " #n "\n\tnop\n\t.endr\n"
 
 #define STR2(x) #x
 #define STR(x) STR2(x)

@@ -2,10 +2,10 @@
 
 extern "C" {
 
-static volatile int always_false = 0;
+static volatile uint16_t always_false = 0;
 
 __attribute__ ((noinline))
-void branch_to () {asm volatile("nop.w");}
+void branch_to () {asm volatile("nop");}
 
 // This macro inserts an always-false branch instruction sequence.
 // This matches the always-true version except the branch is never taken. 
@@ -19,13 +19,13 @@ void branch_to () {asm volatile("nop.w");}
 #define ALWAYS_FALSE_BENCH \
     asm volatile(                     \
         ".p2align 4             \n"   \
-        "  ldr.w    r2, [%0]    \n"   \
-        "  cmp.w    r2, #0      \n"   \
-        "  bne.w    branch_to   \n"   \
-        PAYLOAD_NOPS(2)               \
+        "  ldr      r2, [%0]    \n"   \
+        "  cmp      r2, #0      \n"   \
+        "  bne      branch_to   \n"   \
+        PAYLOAD_NOPS_16_BITS(2)       \
         :                             \
         : "r"(&always_false)          \
-        : "r2", "cc", "memory");      
+        : "r2", "cc", "memory");
 
 __attribute__ ((noinline))
 void init(uint32_t *array, const size_t size, const size_t stride) {

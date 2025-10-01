@@ -7,6 +7,10 @@ extern "C" {
 // Measured_Cycles = ARRAY_SIZE × (8). 
 // Any extra cycles measured is the overhead of measurement itself.
 
+// This uses .thumb mode and 16-bit NOPs to ensure that the instructions
+// are packed tightly without gaps that could be filled by the prefetcher.
+// 
+
 #define JUST_NOPS_16BIT \
     asm volatile(                     \
         ".thumb                 \n"   \

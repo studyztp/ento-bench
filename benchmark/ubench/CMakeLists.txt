@@ -20,10 +20,11 @@ set(BENCH_TARGETS "" CACHE INTERNAL "List of benchmark targets") # At top level
 function (add_ubench)
     set(options)
     set(oneValueArgs TARGET_NAME)
-    set(multiValueArgs SOURCE_FILE)
+    set(multiValueArgs SOURCE_FILE DEFINITIONS)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     set(target_name ${ARG_TARGET_NAME})
     set(source_file ${ARG_SOURCE_FILE})
+    set(definitions ${ARG_DEFINITIONS})
 
     list(APPEND source_file ${CMAKE_CURRENT_SOURCE_DIR}/../main.cc)
 
@@ -41,6 +42,7 @@ function (add_ubench)
         add_stm32_target(${target_name})
     endif()
     target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+    target_compile_definitions(${target_name} PRIVATE ${definitions})
     
     list(APPEND BENCH_TARGETS ${target_name})
     set(BENCH_TARGETS ${BENCH_TARGETS} CACHE INTERNAL "List of benchmark targets")
