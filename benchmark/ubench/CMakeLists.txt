@@ -47,6 +47,7 @@ function (add_ubench)
 endfunction()
 
 add_subdirectory(control)
+add_subdirectory(execution)
 
 message(WARNING "Microbenchmarks targets: ${BENCH_TARGETS}")
 
