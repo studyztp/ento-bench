@@ -2,19 +2,13 @@
 
 extern "C" {
 
-// This macro inserts 8 NOP instructions to match the instruction count.
-// Each NOP takes 1 cycle on STM32-G4 so the expected total cycles is:
-// Measured_Cycles = ARRAY_SIZE × (8). 
-// Any extra cycles measured is the overhead of measurement itself.
-
-// This uses .thumb mode and 16-bit NOPs to ensure that the instructions
-// are packed tightly without gaps that could be filled by the prefetcher.
-// 
+// This macro generates a block of 4 16-bit nop in assembly.
+// This is used to test the behavior of prefetching and instruction refill.
 
 #define JUST_NOPS_16BIT \
     asm volatile(                     \
         ".thumb                 \n"   \
-        ".rept 8                \n"   \
+        ".rept 4                \n"   \
         "  nop                  \n"   \
         ".endr                  \n"   \
         :                             \
