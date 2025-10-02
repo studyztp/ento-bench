@@ -2,7 +2,8 @@
 
 extern "C" {
 
-// This macro generates a block of 4 16-bit nop in assembly.
+// This macro generates a block of 4 16-bit nop in assembly because the
+// instruction line is 64-bit wide for STM32G4.
 // This is used to test the behavior of prefetching and instruction refill.
 
 #define JUST_NOPS_16BIT \
