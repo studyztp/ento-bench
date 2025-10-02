@@ -9,7 +9,8 @@ extern "C" {
 __attribute__ ((noinline))
 void JUST_AN_OP () {
     asm volatile(                     
-        ".thumb                 \n"   
+        ".thumb                 \n" 
+        ".p2align 4             \n"  
         ".rept 8                \n"   
         STR(OP) "s r0, #1       \n"   
         STR(OP) "s r1, #1       \n"   
@@ -28,9 +29,7 @@ void init(uint32_t *array, const size_t size, const size_t stride) {
 
 __attribute__ ((noinline))
 void ubench(uint32_t *array, const size_t size) {
-    JUST_AN_OP();
-    JUST_AN_OP();
-    JUST_AN_OP();
-    JUST_AN_OP();
+    asm volatile(".p2align 4");
+    REPEAT_32(JUST_AN_OP();)
 }
 }
