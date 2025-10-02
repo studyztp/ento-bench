@@ -11,7 +11,7 @@ void JUST_AN_OP () {
     asm volatile(                     
         ".thumb                 \n" 
         ".p2align 4             \n"  
-        ".rept 8                \n"   
+        ".rept 4                \n"   
         STR(OP) "s r0, #1       \n"   
         STR(OP) "s r1, #1       \n"   
         STR(OP) "s r2, #1       \n"   
