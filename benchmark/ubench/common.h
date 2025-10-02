@@ -19,7 +19,10 @@ extern "C" void initialise_monitor_handles(void);
 using namespace EntoBench;
 using namespace EntoUtil;
 
+#ifndef ARRAY_SIZE
 #define ARRAY_SIZE 32
+#endif
+
 #define STRIDE 4
 #define NUM_WARMUP 0
 

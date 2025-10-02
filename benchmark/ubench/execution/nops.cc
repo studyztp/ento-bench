@@ -27,6 +27,7 @@ void init(uint32_t *array, const size_t size, const size_t stride) {
 
 __attribute__ ((noinline))
 void ubench(uint32_t *array, const size_t size) {
+    asm volatile(".p2align 4");
     REPEAT_N(ARRAY_SIZE, JUST_NOPS_16BIT);
 }
 }
