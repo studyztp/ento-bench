@@ -41,13 +41,13 @@ function (add_ubench)
                 set(final_target_name "${target_name}-normal")
             elseif (sys_setup STREQUAL "disabled_icache")
                 set(final_target_name "${target_name}-no-icache")
-                set(final_definitions definitions "DISABLE_I_CACHE")
+                set(final_definitions ${definitions} "DISABLE_I_CACHE")
             elseif (sys_setup STREQUAL "disabled_prefetch")
                 set(final_target_name "${target_name}-no-prefetch")
-                set(final_definitions definitions "DISABLE_PREFETCH")
+                set(final_definitions ${definitions} "DISABLE_PREFETCH")
             elseif (sys_setup STREQUAL "disabled_both_icache_prefetch")
                 set(final_target_name "${target_name}-no-icache-no-prefetch")
-                set(final_definitions definitions "DISABLE_I_CACHE" "DISABLE_PREFETCH")
+                set(final_definitions ${definitions} "DISABLE_I_CACHE" "DISABLE_PREFETCH")
             endif()
             add_benchmark(${final_target_name} 
                 SOURCES ${source_file}
@@ -56,6 +56,8 @@ function (add_ubench)
             add_stm32_target(${final_target_name})
             target_include_directories(${final_target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
             target_compile_definitions(${final_target_name} PRIVATE ${final_definitions})
+
+            message(WARNING "Added benchmark target: ${final_target_name} with definitions: ${final_definitions}")
 
             list(APPEND BENCH_TARGETS ${final_target_name})
             set(BENCH_TARGETS ${BENCH_TARGETS} CACHE INTERNAL "List of benchmark targets")
@@ -74,8 +76,6 @@ endfunction()
 
 add_subdirectory(control)
 add_subdirectory(execution)
-
-message(WARNING "Microbenchmarks targets: ${BENCH_TARGETS}")
 
 add_configured_benchmark_group_with_target_configs("ubench"
   TARGETS ${BENCH_TARGETS}
