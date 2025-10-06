@@ -17,7 +17,14 @@ int main()
 
 
     // NEW IDIOM: Generic cache setup using configuration
-    ENTO_BENCH_SETUP();
+#ifndef DISABLE_I_CACHE
+    printf("Enabling I-Cache\r\n");
+    enable_instruction_cache();
+#endif // DISABLE_I_CACHE
+#ifndef DISABLE_PREFETCH
+    printf("Enabling Prefetch\r\n");
+    enable_instruction_cache_prefetch();
+#endif // DISABLE_PREFETCH
 #endif // GEM5
 
     ENTO_BENCH_PRINT_CONFIG();
