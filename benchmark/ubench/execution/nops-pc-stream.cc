@@ -21,7 +21,7 @@ extern "C" {
 #define NOPS_32BIT \
     asm volatile(                     \
         ".thumb                 \n"   \
-        ".rept 2                \n"   \
+        ".rept 4                \n"   \
         "  nop.w                \n"   \
         ".endr                  \n"   \
         :                             \

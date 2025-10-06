@@ -34,18 +34,42 @@ function (add_ubench)
     if (NOT source_file)
         message(FATAL_ERROR "SOURCE_FILE is required")
     endif()
-    add_benchmark(${target_name} 
-        SOURCES ${source_file}
-        LIBRARIES ${MODULES}
-    )
+
     if (STM32_BUILD)
-        add_stm32_target(${target_name})
+        foreach(sys_setup "normal" "disabled_icache" "disabled_prefetch" "disabled_both_icache_prefetch")
+            if (sys_setup STREQUAL "normal")
+                set(final_target_name "${target_name}-normal")
+            elseif (sys_setup STREQUAL "disabled_icache")
+                set(final_target_name "${target_name}-no-icache")
+                list(APPEND definitions "DISABLE_I_CACHE")
+            elseif (sys_setup STREQUAL "disabled_prefetch")
+                set(final_target_name "${target_name}-no-prefetch")
+                list(APPEND definitions "DISABLE_PREFETCH")
+            elseif (sys_setup STREQUAL "disabled_both_icache_prefetch")
+                set(final_target_name "${target_name}-no-icache-no-prefetch")
+                list(APPEND definitions "DISABLE_I_CACHE" "DISABLE_PREFETCH")
+            endif()
+            add_benchmark(${final_target_name} 
+                SOURCES ${source_file}
+                LIBRARIES ${MODULES}
+            )
+            add_stm32_target(${final_target_name})
+            target_include_directories(${final_target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+            target_compile_definitions(${final_target_name} PRIVATE ${definitions})
+
+            list(APPEND BENCH_TARGETS ${final_target_name})
+            set(BENCH_TARGETS ${BENCH_TARGETS} CACHE INTERNAL "List of benchmark targets")
+        endforeach()
+    elseif (GEM5_BUILD)
+        add_benchmark(${target_name} 
+            SOURCES ${source_file}
+            LIBRARIES ${MODULES}
+        )
+        target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+        target_compile_definitions(${target_name} PRIVATE ${definitions})
+        list(APPEND BENCH_TARGETS ${target_name})
+        set(BENCH_TARGETS ${BENCH_TARGETS} CACHE INTERNAL "List of benchmark targets")
     endif()
-    target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
-    target_compile_definitions(${target_name} PRIVATE ${definitions})
-    
-    list(APPEND BENCH_TARGETS ${target_name})
-    set(BENCH_TARGETS ${BENCH_TARGETS} CACHE INTERNAL "List of benchmark targets")
 endfunction()
 
 add_subdirectory(control)

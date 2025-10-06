@@ -19,7 +19,6 @@ extern "C" {
 
 #define OP_32_BITS \
     asm volatile(                     \
-        ".thumb                 \n"   \
         STR(OP) "w r0, r0, #1    \n"  \
         STR(OP) "w r1, r1, #1    \n"  \
         STR(OP) "w r2, r2, #1    \n"  \

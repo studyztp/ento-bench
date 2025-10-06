@@ -267,8 +267,14 @@ void enable_all_caches()
 #ifndef NATIVE
   // Enable instruction caches (abstracted MCU-specific calls)
 #if defined(STM32G4) || defined(STM32H7)
+#ifndef DISABLE_I_CACHE
+  printf("Enabling I-Cache\r\n");
   enable_instruction_cache();
+#endif // DISABLE_I_CACHE
+#ifndef DISABLE_PREFETCH
+  printf("Enabling Prefetch\r\n");
   enable_instruction_cache_prefetch();
+#endif // DISABLE_PREFETCH
 #endif
 
 #if defined(STM32U5) || defined(STM32F7) || defined(STM32H7)
