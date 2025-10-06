@@ -1,6 +1,6 @@
 set(INST_BITS "16" "32")
 
-set(NUM_OF_REPATING_OPS "1" "2" "4" "8" "16", "32", "64")
+set(NUM_OF_REPATING_OPS "1" "2" "4" "8" "16" "32" "64")
 foreach(NUM_NOPS ${NUM_OF_REPATING_OPS})
     foreach(INST_BIT ${INST_BITS})
         add_ubench(TARGET_NAME nop-${INST_BIT}-bits-pc-stream-${NUM_NOPS} SOURCE_FILE nops-pc-stream.cc DEFINITIONS INST_BITS=${INST_BIT} ARRAY_SIZE=${NUM_NOPS} USE_${INST_BIT}BIT_NOPS)
