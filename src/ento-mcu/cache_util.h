@@ -2,6 +2,7 @@
 #define CACHE_UTIL_H
 
 #include <cstdint>
+#include <cstdio>
 
 #if defined(STM32G4)
   #include <stm32g4xx.h>
