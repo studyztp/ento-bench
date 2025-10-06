@@ -28,7 +28,7 @@ function (add_ubench)
 
     list(APPEND source_file ${CMAKE_CURRENT_SOURCE_DIR}/../main.cc)
 
-    if (NOT target_name)
+    if (NOT target_name or "${target_name}" STREQUAL "")
         message(FATAL_ERROR "TARGET_NAME is required")
     endif()
     if (NOT source_file)
